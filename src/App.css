@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.input-form {
+  background: white;
+  border-radius: 2rem;
+  border: 1px solid black;
+  margin: 1rem;
+  padding: 2rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
