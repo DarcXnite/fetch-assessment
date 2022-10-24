@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/fetch-assessment/static/css/main.76d041bc.css",
+    "main.js": "/fetch-assessment/static/js/main.4342c86e.js",
+    "index.html": "/fetch-assessment/index.html",
+    "main.76d041bc.css.map": "/fetch-assessment/static/css/main.76d041bc.css.map",
+    "main.4342c86e.js.map": "/fetch-assessment/static/js/main.4342c86e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.76d041bc.css",
+    "static/js/main.4342c86e.js"
+  ]
+}
