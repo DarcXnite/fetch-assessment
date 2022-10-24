@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 interface dataParams {
-  occupations: any[]
+  occupations: string[]
   states: any[]
 }
 

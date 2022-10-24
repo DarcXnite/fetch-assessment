@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import useAxios from './hooks/useAxios'
+import axios from 'axios'
 
 interface UserDetails {
   name: string
@@ -27,11 +28,33 @@ function App() {
   const { data, status } = useAxios(
     'https://frontend-take-home.fetchrewards.com/form'
   )
+  const [resStatus, setResStatus] = useState<number>()
+  const [isFormValid, setIsFormValid] = useState<boolean>()
+  const [displayMsg, setDisplayMsg] = useState<boolean>()
   const [details, setDetails] = useState<UserDetails>(initialForm)
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(details)
+    const { name, email, password, occupation, state } = details
+
+    if (!name || !email || !password || !occupation || !state) {
+      console.log('no fields can be empty')
+      setIsFormValid(false)
+      setDisplayMsg(true)
+      return
+    }
+    try {
+      const res = await axios.post(
+        'https://frontend-take-home.fetchrewards.com/form',
+        details
+      )
+      setResStatus(res.status)
+      setIsFormValid(true)
+      setDisplayMsg(true)
+    } catch (err) {
+      console.warn(err)
+    }
+    setDetails(initialForm)
   }
 
   const handleChange = (
@@ -43,14 +66,24 @@ function App() {
       ...prev,
       [e.target.name]: e.target.value,
     }))
-    console.log(details)
   }
 
   return (
     <>
-      <header>Status Code: {status}</header>
+      <div className='header'>
+        <header>Fill out form</header>
+        {displayMsg ? (
+          isFormValid ? (
+            <header className='valid'>
+              Status: {resStatus}, Your form was successfully submitted.
+            </header>
+          ) : (
+            <header className='invalid'>No fields can be empty!</header>
+          )
+        ) : null}
+      </div>
       <div className='input-form'>
-        <form action='submit' onSubmit={e => onSubmit}>
+        <form action='submit' onSubmit={onSubmit} className='form'>
           <input
             type='text'
             placeholder='Name'
@@ -79,6 +112,9 @@ function App() {
             value={details?.occupation}
             onChange={handleChange}
           >
+            <option value='' disabled selected>
+              Select an Occupation
+            </option>
             {data?.occupations.map((occ: string, idx: number) => (
               <option key={idx} value={occ}>
                 {occ}
@@ -92,6 +128,9 @@ function App() {
             value={details?.state}
             onChange={handleChange}
           >
+            <option value='' disabled selected>
+              Select a State
+            </option>
             {data?.states.map((state: States, idx: number) => {
               const { name } = state
               return (
